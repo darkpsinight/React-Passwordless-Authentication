@@ -25,6 +25,21 @@ app.post("/login", async (req, res) => {
     res.json(response)
 })
 
+app.post("/auth", async (req, res) => {
+    try {
+        const token = req.body.token
+        const sessionToken = await client.magicLinks.authenticate(token, {
+            session_duration_minutes: 30
+        })
+        console.log(sessionToken);
+        res.json(sessionToken)
+    } catch (error) {
+        res.json(error)
+    }
+})
+
+
+
 
 app.listen(3002, () => {
     console.log("Server is running at port 3002!");
