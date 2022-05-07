@@ -14,7 +14,7 @@ const Login = () => {
     return (
         <div>
             <div className='formContainer'>
-                <div>
+                <div className="title">
                     <h1>Sign Up</h1>
                 </div>
                 <div className='body'>

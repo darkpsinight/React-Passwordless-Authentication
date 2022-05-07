@@ -13,6 +13,18 @@ const client = new stytch.Client({
     env: stytch.envs.test           //change test -> live to deploy this project
 })
 
+const authMiddleware = (req, res, next) => {
+    const sessionToken = req.headers.sessiontoken
+    client.sessions
+        .authenticate({ session_token: sessionToken })
+        .then(() => {
+            next()
+        })
+        .catch((error) => {
+            res.status(401).json(error)    //401 = access not authorised (Unauthorized response status code)
+        })
+}
+
 app.post("/login", async (req, res) => {
     const email = req.body.email
     const params = {
@@ -38,9 +50,12 @@ app.post("/auth", async (req, res) => {
     }
 })
 
-
+//a simple testing api route
+app.post("/test", authMiddleware, (req, res) => {
+    res.json("It worked, this user is authenticated !")
+})
 
 
 app.listen(3002, () => {
-    console.log("Server is running at port 3002!");
+    console.log("Server is running at port 3002 !");
 });
